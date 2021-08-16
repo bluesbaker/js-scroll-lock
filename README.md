@@ -25,13 +25,13 @@ scroll.unlock();
 
 // a div scroll lock/unlock by id
 scroll.lock("#someid-1");
-scroll.unlocklock("#someid-1")
+scroll.unlock("#someid-1")
 
 // all div scroll lock/unlock by classes
 scroll.lock(".someclass");
-scroll.unlocklock(".someclass")
+scroll.unlock(".someclass")
 
 // all elements lock/unlock by tag name
 scroll.lock("div");
-scroll.unlocklock("div")
+scroll.unlock("div")
 ```
