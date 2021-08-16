@@ -42,7 +42,6 @@ const getListeners = (marker) => {
                 listeners.push({element, listener});
                 break;
             }
-            console.log("element");
             // or other elements
             const tagElements = document.getElementsByTagName(marker);
             tagElements.forEach(element => {
