@@ -14,7 +14,7 @@ const scrollListener = (top, element) => () => {
 
 // get all listeners by marker: 
 // "#id", ".class", "tag" or root container;
-const getListeners = (marker) => {
+const getListeners = (marker = "") => {
     const listeners = [];
     switch (marker[0]) {
         // identificator
