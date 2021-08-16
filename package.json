@@ -1,0 +1,25 @@
+{
+  "name": "js-scroll-lock",
+  "version": "0.1.0",
+  "description": "Provides the scroll lock/unlock function for the DOM elements",
+  "main": "src/scroll-lock.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bluesbaker/js-scroll-lock.git"
+  },
+  "keywords": [
+    "js",
+    "html",
+    "scroll",
+    "lock"
+  ],
+  "author": "Bluesbaker <github.com/bluesbaker>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bluesbaker/js-scroll-lock/issues"
+  },
+  "homepage": "https://github.com/bluesbaker/js-scroll-lock#readme"
+}
