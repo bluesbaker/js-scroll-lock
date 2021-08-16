@@ -1,6 +1,6 @@
 let lockedElements = [];
 
-// an element scroll watcher
+// an element scroll listener
 const scrollListener = (top, element) => () => {
     // a page element
     if(element != undefined) {
