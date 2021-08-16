@@ -56,8 +56,8 @@ const getListeners = (marker) => {
 // exports
 export default {
     lock: (elementMarker) => {
-        const elements = getListeners(elementMarker);
-        elements.forEach(({element, listener}) => {
+        const listeners = getListeners(elementMarker);
+        listeners.forEach(({element, listener}) => {
             element.addEventListener("scroll", listener);
             element.addEventListener("wheel", listener);
             lockedElements.push({marker: elementMarker, element, listener});
