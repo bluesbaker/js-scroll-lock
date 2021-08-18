@@ -16,7 +16,7 @@
     "scroll",
     "lock"
   ],
-  "author": "Bluesbaker <github.com/bluesbaker>",
+  "author": "Konstantin <github.com/bluesbaker>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/bluesbaker/js-scroll-lock/issues"
