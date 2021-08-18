@@ -1,14 +1,14 @@
 let lockedElements = [];
 
 // an element scroll listener
-const scrollListener = (top, element) => () => {
+const scrollListener = (top, element) => {
     // a page element
-    if(element != undefined) {
-        element.scrollTop = top;
+    if(element) {
+        return () => element.scrollTop = top;
     }
     // a root(html/document)
     else {
-        window.scrollTo(0, top);
+        return () => window.scrollTo(0, top);
     }
 }
 
@@ -36,7 +36,7 @@ const getListeners = (marker = "") => {
             // root element
             if(marker === "" || marker === "html") {
                 const element = document;
-                const top = window.scrollY || window.pageYOffset || document.body.scrollTop
+                const top = window.scrollY || window.pageYOffset || document.body.scrollTop +
                             + (document.documentElement && document.documentElement.scrollTop || 0);
                 const listener = scrollListener(top);
                 listeners.push({element, listener});
