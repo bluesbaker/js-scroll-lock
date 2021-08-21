@@ -19,8 +19,7 @@ const scrollListener = (left, top, element) => {
 //  "#id", ".class", "tag", "html" or <empty parameters>;
 const getListeners = (...elementMarkers) => {
     const listeners = [];
-    const markers = elementMarkers.length > 0 ? elementMarkers : [""];
-    markers.forEach(marker => {
+    elementMarkers.forEach(marker => {
         switch (marker[0]) {
             // identificator
             case "#":
@@ -46,7 +45,7 @@ const getListeners = (...elementMarkers) => {
                     const left = window.scrollX || window.pageXOffset || document.body.scrollLeft +
                                 + (document.documentElement && document.documentElement.scrollLeft || 0);
                     const listener = scrollListener(left, top);
-                    listeners.push({marker, element: document, listener});
+                    listeners.push({marker: "html", element: document, listener});
                     break;
                 }
                 // or other elements
@@ -68,7 +67,8 @@ const getListeners = (...elementMarkers) => {
 export default {
     // lock scroll by markers
     lock: (...elementMarkers) => {
-        const listeners = getListeners(...elementMarkers);
+        const markers = elementMarkers.length > 0 ? elementMarkers : ["html"];
+        const listeners = getListeners(...markers);
         listeners.forEach(({marker, element, listener}) => {
             const isUniqueMarker = lockedElements.filter(le => le.marker == marker).length == 0;    
             if(isUniqueMarker) {
@@ -80,9 +80,10 @@ export default {
     },
     // unlock scroll by markers
     unlock: (...elementMarkers) => {
+        const markers = elementMarkers.length > 0 ? elementMarkers : ["html"];
         lockedElements = lockedElements.filter(le => {
-            for(let i = 0; i < elementMarkers.length; i++) {
-                if(le.marker == elementMarkers[i]) {
+            for(let i = 0; i < markers.length; i++) {
+                if(le.marker == markers[i]) {
                     le.element.removeEventListener("scroll", le.listener);
                     le.element.removeEventListener("wheel", le.listener);
                     return false; // delete a locked element
