@@ -17,21 +17,28 @@ npm install js-scroll-lock
 // import js-scroll-lock
 import scroll from "js-scroll-lock"
 // or
-let scroll = require("js-scroll-lock");
+const scroll = require("js-scroll-lock");
 
-// a root scroll lock/unlock
+// root scroll lock/unlock
 scroll.lock();
 scroll.unlock();
+// or
+scroll.lock("html");
+scroll.unlock("html");
 
-// a div scroll lock/unlock by id
+// element scroll lock/unlock by id
 scroll.lock("#someid-1");
-scroll.unlock("#someid-1")
+scroll.unlock("#someid-1");
 
-// all div scroll lock/unlock by classes
+// all elements scroll lock/unlock by class name
 scroll.lock(".someclass");
-scroll.unlock(".someclass")
+scroll.unlock(".someclass");
 
-// all elements lock/unlock by tag name
+// all elements scroll lock/unlock by tag name
 scroll.lock("div");
-scroll.unlock("div")
+scroll.unlock("div");
+
+// use more than one marker to lock/unlock scrollable elements
+scroll.lock("#someid-1", ".someclass", "div"...);
+scroll.unlock("#someid-1", ".someclass", "div"...);
 ```
