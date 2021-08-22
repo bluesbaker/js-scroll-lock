@@ -70,26 +70,24 @@ export default {
         const markers = elementMarkers.length > 0 ? elementMarkers : ["html"];
         const listeners = getListeners(...markers);
         listeners.forEach(({marker, element, listener}) => {
-            const isUniqueMarker = lockedElements.filter(le => le.marker == marker).length == 0;    
-            if(isUniqueMarker) {
-                element.addEventListener("scroll", listener);
-                element.addEventListener("wheel", listener);
-                lockedElements.push({marker, element, listener});
-            }
+            element.addEventListener("scroll", listener);
+            element.addEventListener("wheel", listener);
+            lockedElements.push({marker, element, listener});
         });
     },
     // unlock scroll by markers
     unlock: (...elementMarkers) => {
         const markers = elementMarkers.length > 0 ? elementMarkers : ["html"];
         lockedElements = lockedElements.filter(le => {
+            let isMatch = false;
             for(let i = 0; i < markers.length; i++) {
                 if(le.marker == markers[i]) {
                     le.element.removeEventListener("scroll", le.listener);
                     le.element.removeEventListener("wheel", le.listener);
-                    return false; // delete a locked element
+                    isMatch = true; // delete a locked element
                 }
             }
-            return true;  
+            return !isMatch;
         });
     }
 }
