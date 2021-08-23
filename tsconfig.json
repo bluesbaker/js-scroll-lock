@@ -1,0 +1,11 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "target": "es5",
+        "removeComments": true,
+        "outDir": "dist"
+    },
+    "files": [
+        "src/scroll-lock.ts"
+    ]
+}
