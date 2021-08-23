@@ -1,6 +1,6 @@
 {
   "name": "js-scroll-lock",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Provides the scroll lock/unlock function for the DOM elements",
   "main": "dist/scroll-lock.js",
   "scripts": {
