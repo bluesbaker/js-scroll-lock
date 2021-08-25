@@ -1,34 +1,41 @@
-type ScrollListener = () => void;
+// *********************************************
+// Description:
+// The 'js-scroll-lock' is the simple tool,
+// for the locking/unlocking a scrollbar of DOM.
+// Version: 0.3.2
+// Author: Konstantin <github.com/bluesbaker>
+// *********************************************
 
 class ScrollableElement {
     marker: string;
     element: Element | Document;
-    listener: ScrollListener; 
-    constructor(_marker: string, _element: Element | Document, _listener: ScrollListener) {
+    listener: () => void;
+    constructor(_marker: string, _element: Element | Document) {
         this.marker = _marker;
         this.element = _element;
-        this.listener = _listener;
+        // - listener of the root container
+        if(this.marker === "html") {
+            const top = window.scrollY || window.pageYOffset || document.body.scrollTop +
+                        + (document.documentElement && document.documentElement.scrollTop || 0);
+            const left = window.scrollX || window.pageXOffset || document.body.scrollLeft +
+                        + (document.documentElement && document.documentElement.scrollLeft || 0);
+            this.listener = () => {
+                window.scrollTo(left, top);
+            }
+        }
+        // - listener of a scrollable element
+        else {
+            const el = this.element as Element;
+            const top = el.scrollTop;
+            const left = el.scrollLeft;
+            this.listener = () => {
+                el.scrollTop = top;
+                el.scrollLeft = left;
+            }
+        }
     }
 }
 
-let lockedScrollableElements: ScrollableElement[] = [];
-
-const getScrollListener = (left: number, top: number, element?: Element): ScrollListener => {
-    if(element !== undefined) {
-        return () => {
-            element.scrollLeft = left;
-            element.scrollTop = top;
-        }
-    }
-    else {
-        return () => {
-            window.scrollTo(left, top);
-        }
-    }
-}
-
-// get all ScrollableElement by markers: 
-//  "#id", ".class", "tag", "html" or <empty parameters>;
 const getScrollableElements = (...elementMarkers: string[]): ScrollableElement[] => {
     const scrollableElements: ScrollableElement[] = [];   
     elementMarkers.forEach(marker => {
@@ -37,55 +44,42 @@ const getScrollableElements = (...elementMarkers: string[]): ScrollableElement[]
             case "#":
                 const element = document.getElementById(marker.slice(1));
                 if(element) {
-                    const listener = getScrollListener(element.scrollLeft, element.scrollTop, element);
-                    const scrollableElement = new ScrollableElement(marker, element, listener);
-                    scrollableElements.push(scrollableElement);
+                    scrollableElements.push(new ScrollableElement(marker, element));
                 }        
                 break;
             // class
             case ".":
                 const classElements = document.getElementsByClassName(marker.slice(1));
                 for(let i = 0; i < classElements.length; i++) {
-                    const element = classElements[i];
-                    if(element) {
-                        const listener = getScrollListener(element.scrollLeft, element.scrollTop, element);
-                        const scrollableElement = new ScrollableElement(marker, element, listener);
-                        scrollableElements.push(scrollableElement);
-                    }                
+                    scrollableElements.push(new ScrollableElement(marker, classElements[i]));               
                 }
                 break;
             // element
             default:
                 // root element
                 if(marker === "" || marker === "html") {
-                    const top = window.scrollY || window.pageYOffset || document.body.scrollTop +
-                                + (document.documentElement && document.documentElement.scrollTop || 0);
-                    const left = window.scrollX || window.pageXOffset || document.body.scrollLeft +
-                                + (document.documentElement && document.documentElement.scrollLeft || 0);
-                    const listener = getScrollListener(left, top);
-                    const scrollableElement = new ScrollableElement("html", document, listener);
-                    scrollableElements.push(scrollableElement);
+                    scrollableElements.push(new ScrollableElement("html", document));
                     break;
                 }
                 // or other elements
                 else {
                     const tagElements = document.getElementsByTagName(marker);
                     for(let i = 0; i < tagElements.length; i++) {
-                        const element = tagElements[i];
-                        if(element) {
-                            const listener = getScrollListener(element.scrollLeft, element.scrollTop, element);
-                            const scrollableElement = new ScrollableElement(marker, element, listener);
-                            scrollableElements.push(scrollableElement);
-                        }
+                        scrollableElements.push(new ScrollableElement(marker, tagElements[i]));
                     }
                 }
-                break;
+                break; 
         }
     });
     return scrollableElements;
 }
 
-// lock scroll by markers
+let lockedScrollableElements: ScrollableElement[] = [];
+
+/**
+ * Locking the scrollbar of DOM elements by markers
+ * @param elementMarkers - ".class", "#id", "tag", "html" or empty parameters
+ */
 const lock = (...elementMarkers: string[]) => {
     const markers = elementMarkers.length > 0 ? elementMarkers : ["html"];
     const scrollableElements = getScrollableElements(...markers);
@@ -96,7 +90,10 @@ const lock = (...elementMarkers: string[]) => {
     });
 }
 
-// unlock scroll by markers
+/**
+ * Unlocking the scrollbar of DOM elements by markers
+ * @param elementMarkers - ".class", "#id", "tag", "html" or empty parameters
+ */
 const unlock = (...elementMarkers: string[]) => {
     const markers = elementMarkers.length > 0 ? elementMarkers : ["html"];
     lockedScrollableElements = lockedScrollableElements.filter(le => {
